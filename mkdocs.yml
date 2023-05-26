@@ -19,6 +19,7 @@ theme:
     - navigation.tracking
     - navigation.expand
     - navigation.top
+    - navigation.footer
   palette: 
     # Palette toggle for light mode
     - scheme: yellow
@@ -76,10 +77,11 @@ plugins:
 
 # Page tree
 nav:
-  - SQL:
-    - Window Functions: window_functions.md
-    - Running vs Total Sum: running_vs_total.md
-    - Deduplication: deduplication.md
-    - Value Propagation: value_propagation.md
-    - Previous Value : previous_value.md
-    - Assign id to slices of consecutive sequences number : assign_id_to_group_consecutive_seq.md
+  - Tutorials:
+    - SQL:
+      - Window Functions: window_functions.md
+      - Running vs Total Sum: running_vs_total.md
+      - Deduplication: deduplication.md
+      - Value Propagation: value_propagation.md
+      - Previous Value : previous_value.md
+      - Assign id to slices of consecutive sequences number : assign_id_to_group_consecutive_seq.md
