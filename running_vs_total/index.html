@@ -9,15 +9,17 @@
       
       
       
-        <link rel="prev" href="../previous_value/">
+        <link rel="prev" href="../window_functions/">
       
+      
+        <link rel="next" href="../deduplication/">
       
       <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.3">
     
     
       
-        <title>Assign id to slices of consecutive sequences number - Bill Yee</title>
+        <title>Running vs Total Sum - Bill Yee</title>
       
     
     
@@ -68,6 +70,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#running-vs-total-sum-per-partition" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -99,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Assign id to slices of consecutive sequences number
+              Running vs Total Sum
             
           </span>
         </div>
@@ -275,11 +282,48 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../running_vs_total/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Running vs Total Sum
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Running vs Total Sum
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#running-vs-total-sum-per-partition" class="md-nav__link">
+    Running Vs Total Sum per partition :
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -331,19 +375,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../assign_id_to_group_consecutive_seq/" class="md-nav__link">
         Assign id to slices of consecutive sequences number
       </a>
-      
     </li>
   
 
@@ -373,6 +409,21 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#running-vs-total-sum-per-partition" class="md-nav__link">
+    Running Vs Total Sum per partition :
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -387,120 +438,180 @@
 
 
 
-<p>Given :</p>
-<table>
-<thead>
-<tr>
-<th>group_id</th>
-<th>seq</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>SEC20_N_0</td>
-<td>1</td>
-</tr>
-<tr>
-<td>SEC20_N_0</td>
-<td>2</td>
-</tr>
-<tr>
-<td>SEC20_N_0</td>
-<td>6</td>
-</tr>
-<tr>
-<td>SEC20_N_0</td>
-<td>8</td>
-</tr>
-<tr>
-<td>SEC20_N_0</td>
-<td>9</td>
-</tr>
-<tr>
-<td>SEC20_N_0</td>
-<td>10</td>
-</tr>
-</tbody>
-</table>
-<p>Assign a id to the slice of consecutive sequence numbers</p>
-<p>Answer :</p>
+  <h1>Running vs Total Sum</h1>
+
+<h3 id="running-vs-total-sum-per-partition">Running Vs Total Sum per partition :<a class="headerlink" href="#running-vs-total-sum-per-partition" title="Permanent link">&para;</a></h3>
+<p>This is a classic example to show the importance of the "window". </p>
 <div class="highlight"><pre><span></span><code><span class="k">WITH</span><span class="w"> </span><span class="n">base</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
-<span class="w">        </span><span class="k">VALUES</span><span class="w"> </span>
-<span class="w">        </span><span class="p">(</span><span class="s1">&#39;SEC20_N_0&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
-<span class="w">        </span><span class="p">,(</span><span class="s1">&#39;SEC20_N_0&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
-<span class="w">        </span><span class="p">,(</span><span class="s1">&#39;SEC20_N_0&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span>
-<span class="w">        </span><span class="p">,(</span><span class="s1">&#39;SEC20_N_0&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span>
-<span class="w">        </span><span class="p">,(</span><span class="s1">&#39;SEC20_N_0&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">)</span>
-<span class="w">        </span><span class="p">,(</span><span class="s1">&#39;SEC20_N_0&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span>
-<span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="n">group_sequence</span><span class="p">(</span><span class="n">group_id</span><span class="p">,</span><span class="w"> </span><span class="n">seq</span><span class="p">)</span>
-<span class="p">),</span><span class="w"> </span><span class="n">base_with_previous_sequence</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
-<span class="w">    </span><span class="p">,</span><span class="n">LAG</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">group_id</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">previous_seq</span>
-<span class="w">    </span><span class="c1">-- If the current sequence - 1 is equals to previous value , then it means no gap </span>
-<span class="w">    </span><span class="c1">-- Else it means that there is a gap so we return 1</span>
-<span class="w">    </span><span class="p">,</span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LAG</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">group_id</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="mi">0</span><span class="w">  </span><span class="k">ELSE</span><span class="w"> </span><span class="mi">1</span><span class="w">  </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">diff</span>
-<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">base</span>
-<span class="p">),</span><span class="w"> </span><span class="n">base_with_lot_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span>
-<span class="w">    </span><span class="c1">-- Sum the diff , after each gap , the lot_id increases by 1</span>
-<span class="w">    </span><span class="p">,</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">group_id</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">seq</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">lot_id</span>
-<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">base_with_previous_sequence</span>
+<span class="w">    </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="mi">2</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="mi">3</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="mi">4</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="mi">1</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="mi">2</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="mi">3</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="mi">1</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="mi">2</span><span class="p">)</span>
+<span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="p">(</span><span class="n">pk</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="k">version</span><span class="p">)</span>
 <span class="p">)</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">base_with_lot_id</span><span class="p">;</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">t1</span><span class="p">.</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="n">OVER</span><span class="p">(</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">pk</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">version</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">running_sum</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">base</span><span class="w"> </span><span class="n">t1</span>
+<span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">t</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">pk</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="k">version</span><span class="p">;</span>
 </code></pre></div>
 <table>
 <thead>
 <tr>
-<th>group_id</th>
-<th>seq</th>
-<th>previous_seq</th>
-<th>diff</th>
-<th>lot_id</th>
+<th>pk</th>
+<th>value</th>
+<th>version</th>
+<th>running_sum</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>SEC20_N_0</td>
 <td>1</td>
-<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>4</td>
+<td>4</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
 <td>1</td>
 <td>1</td>
 </tr>
 <tr>
-<td>SEC20_N_0</td>
 <td>2</td>
 <td>1</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<td>SEC20_N_0</td>
-<td>6</td>
 <td>2</td>
-<td>1</td>
 <td>2</td>
 </tr>
 <tr>
-<td>SEC20_N_0</td>
-<td>8</td>
-<td>6</td>
+<td>2</td>
+<td>1</td>
+<td>3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>Notice how there is no window clause defined . This means that the default window is RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW.  So in this case , it's not required to specify it . 
+However, if we wanted a total sum , then we would need to specify the clause as follows :</p>
+<div class="highlight"><pre><span></span><code><span class="k">WITH</span><span class="w"> </span><span class="n">base</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="mi">2</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="mi">3</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="mi">4</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="mi">1</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="mi">2</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="mi">3</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="mi">1</span><span class="p">),</span>
+<span class="w">    </span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">  </span><span class="mi">2</span><span class="p">)</span>
+<span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="p">(</span><span class="n">pk</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="k">version</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">t1</span><span class="p">.</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="n">OVER</span><span class="p">(</span><span class="w"> </span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">pk</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">version</span><span class="w"> </span><span class="n">RANGE</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="n">UNBOUNDED</span><span class="w"> </span><span class="n">PRECEDING</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">UNBOUNDED</span><span class="w"> </span><span class="n">FOLLOWING</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_sum_per_partition</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">base</span><span class="w"> </span><span class="n">t1</span>
+<span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">t</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">pk</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="k">version</span><span class="p">;</span>
+</code></pre></div>
+<p>End Result:</p>
+<table>
+<thead>
+<tr>
+<th>pk</th>
+<th>value</th>
+<th>version</th>
+<th>total_sum_per_partition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>4</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+<td>4</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>4</td>
+<td>4</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
 <td>1</td>
 <td>3</td>
 </tr>
 <tr>
-<td>SEC20_N_0</td>
-<td>9</td>
-<td>8</td>
-<td>0</td>
+<td>2</td>
+<td>1</td>
+<td>2</td>
 <td>3</td>
 </tr>
 <tr>
-<td>SEC20_N_0</td>
-<td>10</td>
-<td>9</td>
-<td>0</td>
+<td>2</td>
+<td>1</td>
 <td>3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
 </tr>
 </tbody>
 </table>
