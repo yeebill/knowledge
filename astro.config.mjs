@@ -4,6 +4,8 @@ import starlightImageZoom from 'starlight-image-zoom'
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://yeebill.github.io",
+  // base: "knowledge",
   integrations: [
     starlight({
       plugins: [starlightImageZoom()],
