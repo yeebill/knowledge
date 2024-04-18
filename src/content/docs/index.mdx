@@ -1,0 +1,29 @@
+---
+title: 'Documentation' 
+template: splash
+hero:
+#   tagline: Knowledge base for Berkindale Analytics
+  image:
+    #   file:  ../../assets/images/founder.webp
+      file: ../../assets/images/full_name.png	
+#   actions:
+#     - text: Guide 
+#       link: /guides/example.md/
+#       icon: right-arrow
+#       variant: secondary
+#     - text: Concepts 
+#       link: /concepts/order_book/
+#       icon: open-book
+#       variant: secondary
+    # - text: Get source
+    #   link: https://github.com/pls-rs/pls/
+    #   icon: github
+    #   variant: secondary
+---
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+<CardGrid>
+  <LinkCard title="Concepts" href="/concepts/order_book" description= "Explanation or discussion about topics"/>
+  <LinkCard title="Guides" href="/guides/sql/break_grouped_sets" description="Solutions to specifc problems or question" />
+  <LinkCard title="References" href="/references" description="Technical descriptions of the machinery and how to operate it." />
+</CardGrid>
