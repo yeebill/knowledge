@@ -1,4 +1,6 @@
-Given :
+---
+title: How to break grouped set
+---
 
 | group_id  | seq |
 |-----------|-----|
@@ -11,9 +13,12 @@ Given :
 
 Assign a id to the slice of consecutive sequence numbers
 
-Answer :
+Answer : 
 
-```sql
+* Add a column where given a condition is true return `1`
+* SUM new column OVER PARTITION to break sequentially create new id for each subset. 
+
+```sql {16,21}
 WITH base AS (
 	SELECT * FROM (
 		VALUES 
