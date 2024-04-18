@@ -14,10 +14,6 @@ export default defineConfig({
       logo: {
         src: "/src/assets/images/name.png",
       },
-      // favicon: "/public/favicon.ico",
-      // social: {
-      //   github: "https://github.com/Berkindale",
-      // },
       sidebar: [
         {
           label: "Concepts",

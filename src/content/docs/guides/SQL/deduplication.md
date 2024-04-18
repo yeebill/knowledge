@@ -1,5 +1,5 @@
 ---
-title: How to get deduplicate rows
+title: How to deduplicate rows
 ---
 
 | groupId | value  | version | rank |
